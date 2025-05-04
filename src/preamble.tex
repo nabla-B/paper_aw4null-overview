@@ -1,0 +1,40 @@
+% Document class
+\documentclass[conference,a4paper]{IEEEtran}
+
+% Encoding and font
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+
+% Graphics and paths
+\usepackage{graphicx}
+\graphicspath{{assets/images/}}
+
+% Math packages
+\usepackage{amsmath,amssymb}
+
+% Hyperlinks
+\usepackage[hidelinks]{hyperref}
+
+% Color (for figures and highlights)
+\usepackage{xcolor}
+
+% Custom commands
+% Example: Real numbers symbol
+\newcommand{\R}{\mathbb{R}}
+
+% Theorem environments (if needed)
+\usepackage{amsthm}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+
+% Page layout adjustments (optional)
+% \usepackage[margin=0.75in]{geometry}
+
+% PDF metadata setup
+\hypersetup{
+  pdftitle={Autowerkstatt 4.0: A Federated, AI-Driven Diagnostics Ecosystem for Workshops},
+  pdfauthor={Alice Smith, Bob Meier, Carol Jones, et al.},
+  pdfsubject={Overview Paper for Autowerkstatt 4.0},
+  pdfkeywords={AI diagnostics, federated learning, automotive workshops, oscilloscopes, GAIA-X, REST, WebSockets}
+}
