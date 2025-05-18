@@ -45,13 +45,34 @@ AI diagnostics, federated learning, automotive workshops, oscilloscopes, GAIA-X,
   \caption{Picture of an OBD device}
   \label{fig:obd}
 \end{figure}
-Discuss the evolution from traditional On-Board Diagnostics (OBD) to advanced off-board diagnostic tools. Highlight limitations in deep signal analysis for both internal combustion and electric vehicles.
+Modern cars consist of a multitude of electronic, mechanic, and electromechanical subsystems. Market pressure and user demands regarding energy efficiency, comfort and passenger safety lead to an over-increasing complexity in the systems themselves and their interactions. Errorness behaviors in one of the subsystems can lead to various malfunctions. The purpose of car diagnostic systems is supporting technicians to identify the root cause of the malfunction.
+
+Design goals for these car diagnostic systems are multiple:
+-clarity and specificity of the erroneous part
+-usability: easy to use correctly and hard to use incorrectly; teachability
+-robustness against physical damage
+-pricing
+-costs of illformed diagnostics
+
+Since some faults can lead to degraded combustion behaviors without noticeable effects for the car’s operator, some of these diagnostic systems have to be built into the car while others may reside in a sophisticated auto workshop, thus giving us the differentiation between on-board diagnostic and off-board diagnostic. According to this very definition, on-board diagnostic tools get delivered with each and every individual car itself, hence adding a) more costs; b) more weight; c) more complexity to the car.
+
+It is therefore that auto manufacturers are trying to reduce the amount and extent of these systems to the least possible amount. Usually working against governmental regulations, the operators justified wish for the cars’ status information and the necessity to beware the cars’ systems to operate under potentially harmful conditions. In opposition to that, off-board systems do not need to be built into every car, but need to be bought by workshops. The market pressure for those tools arises out of the situation that mechanics get paid for maintaining and repairing a car but not necessarily the diagnostics itself. That’s why the evaluation of the cost-benefit ratios looks likely different for these tools.
 
 \subsection{Future Challenges in ICEV and BEV}
-Outline upcoming diagnostic challenges posed by complex powertrains, high-voltage systems, and the convergence of software-defined vehicles.
+Diversification in the set of cars also leads to a diversification in diagnostics. One particular fork in the road appears to be the further differentiation between internal combustion engine vehicles – ICEV; and battery electric vehicles – BEV. Both technologies confront auto shops with different diagnostic challenges. Yet both have in common that they include electrical signals and purely mechanical parts. While fault diagnostics of the purely mechanical parts of the car, e.g. suspension hinges, brakes, and fenders, can be categorized as a traditional craft, the diagnostics of peculiar electrical signals is as diverse as the ever-increasing amount of electrical assistant systems. A commonly used diagnostic tool for electrical fault analysis is the oscilloscope, which has been used in its traditional and auto shop specific variations by car technicians since the 1960s.
 
 \subsection{Interesting Technologies for Upcoming Car Diagnostic Systems}
-\subsubsection{Oszilloscopes}
+An oscilloscope is an electrical device with the purpose of projecting a time varying voltage (oscillation) onto a visible plane (scope), and with that displaying analytical features of the voltage visibly.
+
+Working with oscilloscopes requires a certain depth of electrical understanding as well as proper handling of the necessary components, and well-trained pattern recognition of the recorded signals. These three qualities decrease the level of teachability significantly. Nevertheless, advanced electrical diagnosis requires recording timely varying voltages on an indicator of healthy or unhealthy behavior. Reiterating the previous argument about cost-benefit ratio of off-board diagnostic systems, this leads to a situation in which a useful tool cannot be trivially deployed to non-prepared auto shops, due to extensive learning curves.
+
+Anyhow, we suspect to enhance teachability and robustness of these tools by employing certain technologies:
+\begin{enumerate}[label=\alph*:) ]
+  \item Machine Learning for Signal Clustering
+  \item Modern Microcontroller Technology
+  \item REST API \& Web Sockets
+\end{enumerate}
+
 \begin{figure}[ht]
   \centering
   \includegraphics[width=0.8\linewidth]{oscilloscopes}
@@ -60,26 +81,40 @@ Outline upcoming diagnostic challenges posed by complex powertrains, high-voltag
 \end{figure}
 Review the role of high-speed waveform capture in pinpointing transient faults.
 
-\subsubsection{ML for Signal Clustering}
+\subsubsection{Machine Learning for Signal Clustering}
 \begin{figure}[ht]
   \centering
   \includegraphics[width=0.8\linewidth]{waveforms_good_bad}
   \caption{Two waveforms: a bad and a good measurement of a compression cycle}
   \label{fig:waveforms_good_bad}
 \end{figure}
-Describe machine learning techniques to automatically compare live measurements against labeled “good” datasets.
+Programed computer functions can be understood as mappings of a domain to a codomain, where the domain is vulgarly referred to as input data and the codomain as output data. During the 1950s, researchers at Bell Laboratories and the Institute for Advanced Study in Princeton proposed that such programmatic functions could be executed autonomously by computer systems themselves — an idea that anticipated what is now formalized as the Universal Approximation Theorem Since then, this niche idea has evolved into a scientific discipline called Artificial Intelligence and Machine Learning. Latest advances in this area did demonstrate useful opportunities. It can thus be imagined to define an abstract function that maps a multidimensional time dependent vector of electrical quantities, also known as time series, to a certain fault category. From the toolkit of machine learning, multiple technologies could be interesting from a research stand point to generate such a function or group of functions, though all having in common a need for training data. The implementation of any of those functions could increase the specificity of fault identification while simultaneously decreasing the amount of training necessary for a mechanic to analyze signals.
 
-\subsubsection{REST and WebSockets}
-Discuss the use of HTTP REST for case management and WebSocket channels for streaming real-time data.
+\subsubsection{Modern Microcontroller Technology}
+Traditional oscilloscopes usually come as all-in-one boxes, with high-accuracy analog front-ends and delicate signal processing units to display the measured voltages on a built-in screen. All of the mentioned parts are usually not meant for rough environments such as auto workshops. Specially designed electronic oscilloscopes that come in ruggedized cases may end up costing multiple thousands of euros.
 
-\subsubsection{Scope-Driver and HTTP Server}
+So far, regular microcontrollers have not been used in oscilloscopes. However, recent generations of microcontrollers feature speeds that are high enough for sampling measurements in some auto shop use cases. In comparison to faster but also more expensive alternatives (e.g. FPGA, …), developing a sampling oscilloscope on a microcontroller basis with a USB interface to a regular computer, tablet, or smartphone could prove itself as a possible way forward for more robust yet inexpensive auto shop oscilloscopes.
+
+\subsubsection{REST API and Web Sockets}
 \begin{figure}[ht]
   \centering
   \includegraphics[width=0.8\linewidth]{data_server_architecture}
   \caption{Architecture diagram: scope connected to server via libusb and server providing REST/WebSocket}
   \label{fig:data-server}
 \end{figure}
-Introduce the concept of a driver plugin (shared object) coupled with an HTTP server for flexible data acquisition.
+Since the two cornerstones — machine learning and microcontroller-based oscilloscopes — have been identified by now, the challenge of connecting them has to be addressed.
+
+Since Machine Learning models require certain amounts of training data as well as centralized compute power, the according analysis models can be more easily run on centralized servers than on individual auto shop workstations. Yet, the data acquisition with the microcontroller oscilloscopes has to be performed on-site at the auto shop. Connecting these two modules could be done in a multitude of ways.
+
+With the increasing employment of web technologies — especially HTTP (Hypertext Transfer Protocol)— it can be assumed that handling the data from acquisition to analysis could be implemented in an open-source approach. While doing that, the fundamental architecture needs to encompass two different modes of communication: asynchronous and synchronous.
+
+\paragraph{Asynchronous Communication}
+Asynchronous communication is not dependent on both ends of a communication channel having the same concept of time. This results in a certain pattern of communication that can also be described as a request–response model. One implementation using HTTP is REST (Representational State Transfer). These communication methods can be used to send a structured package of acquired data, including a recorded time series of a voltage as well as relevant metadata about this measurement, such as milage, sensor type, make-and-model of a car to a server’s interface called API. The server then has a certain amount of time to analyze the posted data, compare it against the internal database, formulate a response with a diagnosis and send it back to the requesting client.
+
+\paragraph{Synchronous Communication}
+The described pattern of analysis requires all of the posted data to be already in the RAM of the client’s machine, while the data itself can only be acquired one sample at a time over a certain period. Collecting these individual samples into a structured block necessitates that the computer’s input channel as well as the data collecting module run synchronously, meaning with the same idea of time. This can be done via an extension of the http called a web socket.
+
+In conclusion this means that the middleware between USB-connected oscilloscopes and internet connected analysis service can be implemented using off-the-shelf web frameworks.
 
 % 2. Proposed System
 \section{Proposed System}
