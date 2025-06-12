@@ -108,7 +108,8 @@ Review the role of high-speed waveform capture in pinpointing transient faults.
   \label{fig:waveforms_good_bad}
 \end{figure}
 Programed computer functions can be understood as mappings of a domain to a codomain, where the domain is vulgarly referred to as input data and the codomain as output data. 
-During the 1950s, researchers at Bell Laboratories and the Institute for Advanced Study in Princeton proposed that such programmatic functions could be executed autonomously by computer systems themselves — an idea that anticipated what is now formalized as the Universal Approximation Theorem Since then, this niche idea has evolved into a scientific discipline called Artificial Intelligence and Machine Learning. 
+During the 1950s, researchers at Bell Laboratories and the Institute for Advanced Study in Princeton proposed that such programmatic functions could be executed autonomously by computer systems themselves 
+— an idea that anticipated what is now formalized as the Universal Approximation Theorem Since then, this niche idea has evolved into a scientific discipline called Artificial Intelligence and Machine Learning. 
 Latest advances in this area did demonstrate useful opportunities. 
 It can thus be imagined to define an abstract function that maps a multidimensional time dependent vector of electrical quantities, also known as time series, to a certain fault category. 
 From the toolkit of machine learning, multiple technologies could be interesting from a research stand point to generate such a function or group of functions, though all having in common a need for training data. 
@@ -121,7 +122,8 @@ Specially designed electronic oscilloscopes that come in ruggedized cases may en
 
 So far, regular microcontrollers have not been used in oscilloscopes. 
 However, recent generations of microcontrollers feature speeds that are high enough for sampling measurements in some auto shop use cases. 
-In comparison to faster but also more expensive alternatives (e.g. FPGA, …), developing a sampling oscilloscope on a microcontroller basis with a USB interface to a regular computer, tablet, or smartphone could prove itself as a possible way forward for more robust yet inexpensive auto shop oscilloscopes.
+In comparison to faster but also more expensive alternatives (e.g. FPGA, …), developing a sampling oscilloscope on a microcontroller basis with a USB interface to a regular computer, tablet, 
+or smartphone could prove itself as a possible way forward for more robust yet inexpensive auto shop oscilloscopes.
 
 \subsubsection{REST API and Web Sockets}
 \begin{figure}[ht]
@@ -130,7 +132,7 @@ In comparison to faster but also more expensive alternatives (e.g. FPGA, …), d
   \caption{Architecture diagram: scope connected to server via libusb and server providing REST/WebSocket}
   \label{fig:data-server}
 \end{figure}
-Since the two cornerstones — machine learning and microcontroller-based oscilloscopes — have been identified by now, the challenge of connecting them has to be addressed.
+Since the two cornerstones — machine learning and microcontroller - based oscilloscopes — have been identified by now, the challenge of connecting them has to be addressed.
 
 Since Machine Learning models require certain amounts of training data as well as centralized compute power, the according analysis models can be more easily run on centralized servers than on individual auto shop workstations. 
 Yet, the data acquisition with the microcontroller oscilloscopes has to be performed on-site at the auto shop. 
@@ -179,7 +181,8 @@ An example for this is the diagnostic trouble code <DTC>
 Even though it specifies a clear symptom, it does not yet contain information about the origin of that faulty behavior.
 In stark contrast to what some people may think, diagnostic trouble codes do not directly indicate the necessary actions for repair.
 After analyzing the set of trouble codes, a technician will always resort to differential diagnostics using off-board tools.
-In case of the demostrated DTC, this might include validating the correct supply voltage to the sensor itself; validating the supply voltage to the motor control unit; validating the produced fuel pressure by utilizing an external pressure gauge; and validating the ohmic resistance of the signal line with a multi meter.
+In case of the demostrated DTC, this might include validating the correct supply voltage to the sensor itself; 
+validating the supply voltage to the motor control unit; validating the produced fuel pressure by utilizing an external pressure gauge; and validating the ohmic resistance of the signal line with a multi meter.
 This differential diagnostic search tree is used and ordered to rule out one possible problem after another.
 Depending on the read-out trouble codes, such a search tree might take up to hours or even days, resulting not only in a lenghty waiting process for the workshop's customer, but also hassle for the autoshop itself in terms of inner shop logistics.
 In this very case, one single oscilloscope measurement measuring the signal on the line at the sensor connector and the motor controller connector could have been used to calculate the signal's transfer function $H(s)$ to rule out a whole plathora of electrical problems.
@@ -252,6 +255,39 @@ By proving a concept of intergration of these three layers, the project will out
   \label{fig:data-api}
 \end{figure}
 Detail the integrated pilot installation in partner workshops, including hardware setup and user interface snapshots.
+The current demonstrator consists of six primary components:
+\begin{itemize}
+  \item A laptop equipped with OmniView and VCDS software
+  \item A VCDS diagnostic tool
+  \item Four OmniAIScopes
+  \item Connection equipment (e.g., cables, Banana-to-BNC adapters)
+  \item A formal contract
+  \item Instructional materials
+\end{itemize}
+In accordance with the proposed workflow for car diagnostics, the process begins with connecting the vehicle to a VCDS device, which performs a standard OBD (on-board diagnostics) scan. 
+As described in the Introduction, this step typically yields vague and sometimes insufficient error codes (DTCs), which are then displayed and recorded on the local laptop.
+
+To improve diagnostic specificity, USB-based oscilloscopes—our OmniAIScopes—are connected to various electrical sensors in the vehicle using Banana-to-BNC adapters. 
+Each scope records time-varying voltages from a specific sensor. 
+These scopes are linked via a central hub, which aggregates signals and routes them to the local laptop, where the OmniView software allows real-time signal visualization and preliminary interpretation.
+
+Collected measurement data is transferred via HTTP from the local hub to a remote web server. 
+The web server then forwards the data to the central THGA server, where it is stored for future analysis. 
+This architecture aligns with the proposed use of REST APIs for asynchronous communication and WebSockets for synchronous interaction, as described in the REST API and Web Sockets subsection of the introduction.
+
+The long-term vision involves utilizing this stored signal data to train machine learning models capable of classifying faults based on signal patterns. 
+However, due to the current lack of sufficient training data in the THGA repository, real-time diagnostic feedback based on these models is not yet operational. 
+This aligns directly with the discussion in Machine Learning for Signal Clustering—highlighting the need for a significant and diverse training dataset before meaningful fault classification can be achieved.
+
+The demonstrator has already been deployed in approximately 50–60 workshop environments over a six-month field test period, 
+fulfilling the initial goals set out under the Proof-of-Concepts section in the proposed system. 
+However, several challenges remain:
+\begin{itemize}
+  \item The various tools (VCDS, OmniView, hub interface, ML services) have not yet been unified into a single software platform, which limits usability.
+  \item Training data volume remains insufficient, restricting the machine learning module’s ability to generate actionable feedback.
+\end{itemize}
+
+
 
 % 3. Results
 \section{Results}
