@@ -23,6 +23,9 @@
 % Listing
 \usepackage{listings}
 
+% This prevents the package from blocking a clean build due to minor checksum changes.
+\usepackage[reruncheck=false]{rerunfilecheck}
+
 % Verbatim
 \usepackage{fvextra}
 \DefineVerbatimEnvironment{MyVerb}{Verbatim}{breaklines=true}
