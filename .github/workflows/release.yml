@@ -28,6 +28,7 @@ jobs:
            texlive-fonts-recommended \
            texlive-publishers \
            texlive-bibtex-extra \
+           texlive-lang-cjk \
            latexmk \
            lmodern
       - name: Build PDF (ignore latexmk errors)
